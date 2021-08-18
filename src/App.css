@@ -1,0 +1,87 @@
+.App {
+  text-align: center;
+  background-color: #212121;
+  height: 100vh;
+}
+
+.psw {
+  color: #ddd;
+  font-size: 25px;
+}
+
+.rowDiv {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.button {
+  color: rgb(111, 111, 228); /*rgb(37, 37, 192);*/
+  font-size: 40;
+  border: 0ch;
+  margin: 0 10px;
+  font-size: large;
+  padding: 0 10px;
+  border-radius: 15px;
+}
+
+.title {
+  color: white;
+  background-color: rgb(111, 111, 228); /*rgb(58, 58, 230);*/
+  margin: auto;
+  padding: 1em 0;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.img {
+  background-color: #ddd;
+  border-radius: 50px;
+  padding: 1em;
+  margin: 0 1.5em;
+  float: inline-end;
+}
+
+.pswDiv {
+  border-radius: 15px;
+  background-color: #525252; /*rgb(236, 236, 236);*/
+  margin: 0.5em 10%;
+  margin-top: 2em;
+}
+
+.genBtn {
+  color: white;
+  background-color: rgb(111, 111, 228);
+  padding: 1em 2em;
+  margin: 2%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.check {
+  color: #ddd;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.errorMsg {
+  color: rgb(226, 4, 4);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.gradient {
+  background: linear-gradient(rgb(111, 111, 228), #212121);
+  height: 10px;
+}
+
+.copied {
+  color: #00d100;
+}
+
+.size30 {
+  font-size: 30px;
+}
+
+.textCol {
+  color: #ddd;
+}
