@@ -1,8 +1,8 @@
 # pswgen-react
 This is a chrome extension that generates passwords randomly. It includes a beautiful dark mode and many parameters to get your dreamed password !
 
-![alt image]("https://github.com/EvanKoe/pswgen-react/blob/main/pictures/pic1.png" pswgen-react)
-![alt image]("https://github.com/EvanKoe/pswgen-react/blob/main/pictures/pic2.png" pswgen-react)
+![alt text](https://github.com/EvanKoe/pswgen-react/blob/main/pictures/pic1.png)
+![alt text](https://github.com/EvanKoe/pswgen-react/blob/main/pictures/pic2.png)
 
 # Installation
 
