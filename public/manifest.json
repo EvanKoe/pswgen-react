@@ -1,12 +1,12 @@
 {
   "short_name": "PswdGen",
   "name": "Password Generator",
-  "icons": {
-    "16": "favicon.ico",
-    "48": "logo192.png",
-    "128": "logo512.png",
-    "512": "pass.png"
-  },
+  "icons": [
+    "favicon.ico",
+    "logo192.png",
+    "logo512.png",
+    "pass.png"
+  ],
   "permissions": [],
   "manifest_version": 2,
   "version": "0.0.1",
