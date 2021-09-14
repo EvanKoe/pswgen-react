@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import Generator from './Gen';
-import Vault from './Vault';
-import Secure from './Secure';
+import Generator from './Generator/Gen';
+import Vault from './Vault/Vault';
+import Secure from './SecureVault/Secure';
+import New from './NewEntry/New';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <Route exact path="/" component={Generator}/>
       <Route exact path="/securevault" component={Secure}/>
       <Route exact path="/vault" component={Vault}/>
+      <Route exact path="/new" component={New}/>
     </BrowserRouter>
   );
 };

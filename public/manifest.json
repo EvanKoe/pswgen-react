@@ -1,12 +1,9 @@
 {
   "short_name": "PswdGen",
   "name": "Password Generator",
-  "icons": [
-    "favicon.ico",
-    "logo192.png",
-    "logo512.png",
-    "pass.png"
-  ],
+  "icons": {
+    "32": "pass.png"
+  },
   "permissions": [],
   "manifest_version": 2,
   "version": "0.0.1",
@@ -14,5 +11,6 @@
     "default_popup": "index.html",
     "default_icon": "pass.png",
     "default_title": "Password Generator"
-  }
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

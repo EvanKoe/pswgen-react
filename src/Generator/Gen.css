@@ -7,6 +7,7 @@
 .psw {
   color: #ddd;
   font-size: 25px;
+  display: flex;
 }
 
 .rowDiv {
@@ -15,13 +16,17 @@
 }
 
 .button {
-  color: rgb(111, 111, 228); /*rgb(37, 37, 192);*/
-  font-size: 40;
+  color: rgb(111, 111, 228);
+  font-size: 40px;
   border: 0ch;
   margin: 0 10px;
-  font-size: large;
-  padding: 0 10px;
+  padding: 0 5px;
   border-radius: 15px;
+}
+
+.button:hover {
+  opacity: 50%;
+  transition: all 0.2s ease-in;
 }
 
 .title {
@@ -34,7 +39,7 @@
 
 .img {
   background-color: #ddd;
-  border-radius: 50px;
+  border-radius: 15px;
   padding: 1em;
   margin: 0 1.5em;
   float: inline-end;
@@ -42,7 +47,7 @@
 
 .pswDiv {
   border-radius: 15px;
-  background-color: #525252; /*rgb(236, 236, 236);*/
+  background-color: #525252;
   margin: 0.5em 10%;
   margin-top: 2em;
 }
@@ -84,12 +89,16 @@
   color: #ddd;
 }
 
-.navbar {
-  background-color: rgb(111, 111, 228);
+.optionDiv {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding-top: .5em;
+  padding: 0 15px;
+  align-items: center;
+}
+
+input.checkboxes {
+  margin-left: auto;
+  width: 25px;
+  height: 25px;
 }
 
 .active {
@@ -101,4 +110,5 @@
   height: 90%;
   padding: 10px;
   margin: 0 10px;
+  transition: all 0.2s ease-in;
 }

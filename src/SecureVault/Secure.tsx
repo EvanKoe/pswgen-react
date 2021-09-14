@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import './Secure.css';
 import * as bcrypt from 'bcryptjs';
+import './Secure.css';
 
 const Secure = () => {
   const [input, setInput] = useState('');
@@ -26,7 +26,7 @@ const Secure = () => {
           console.log(err);
           return setMsg('Server error')
         } else if (result)
-          history.push('/vault');
+          history.replace('/vault');
         else
           setMsg('Wrong password !');
       });
@@ -52,7 +52,7 @@ const Secure = () => {
           className="nav"
           alt="Password generator"
           src="https://img.icons8.com/ios/50/000000/password--v1.png"
-          onClick={() => history.push('/')}
+          onClick={() => history.replace('/')}
         />
         <p className="title">Your vault</p>
         <img
@@ -61,17 +61,21 @@ const Secure = () => {
           src="https://img.icons8.com/pastel-glyph/50/000000/safe--v2.png"
         />
       </div>
-      <form onSubmit={verify} className="form">
+      <div className="form">
         <input
           className="input"
           type="password"
           placeholder="Master password"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.code === 'Enter')
+              return verify()
+          }}
         />
         <p className="error">{msg}</p>
-        <input type="submit" className="button"/>
-      </form>
+        <input type='button' onClick={verify} value='Submit' className="button"/>
+      </div>
     </>
   );
 };

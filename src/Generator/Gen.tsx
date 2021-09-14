@@ -67,7 +67,7 @@ const Generator = () => {
           className="nav"
           alt="Your vault"
           src="https://img.icons8.com/pastel-glyph/50/000000/safe--v2.png"
-          onClick={() => history.push('/securevault')}
+          onClick={() => history.replace('/securevault')}
         />
       </div>
       <div className="pswDiv">
@@ -96,6 +96,7 @@ const Generator = () => {
           onClick={() => setL(len - 1)}
           value='-'
           className="button rowDiv size30"
+          style={{ padding: '10px 15px', marginLeft: 5 }}
         />
         <p
           className="rowDiv size30 textCol"
@@ -105,26 +106,27 @@ const Generator = () => {
           onClick={() => setL(len + 1)}
           value='+'
           className="button rowDiv size30"
+          style={{ padding: '10px 15px' }}
         />
       </div>
       <div>
-        <div>
+        <div className='optionDiv'>
+          <p className="rowDiv check"> Include Letters </p>
           <input
             type="checkbox"
             checked={isAlpha}
-            onChange={(state) => setIfAlpha(!isAlpha)}
-            className="rowDiv"
+            onChange={(state) => setIfAlpha(a => !a)}
+            className="rowDiv checkboxes"
           />
-          <p className="rowDiv check"> Include Letters </p>
         </div>
-        <div>
+        <div className='optionDiv'>
+          <p className="rowDiv check"> Include special characters </p>
           <input
             type="checkbox"
             checked={isSpec}
-            onChange={(state) => setIfSpec(!isSpec)}
-            className="rowDiv"
+            onChange={(state) => setIfSpec(a => !a)}
+            className="rowDiv checkboxes"
           />
-          <p className="rowDiv check"> Include special characters </p>
         </div>
       </div>
       <input
