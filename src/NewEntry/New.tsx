@@ -18,34 +18,31 @@ const New = () => {
   const [username, setUsername] = useState(prop === undefined ? '' : prop.gusername);
   const [password, setPassword] = useState(prop === undefined ? '' : prop.gpassword);
   const [isPwsViewable, setIfPwsViewable] = useState(false);
+  const saveName = prop ? prop.gname : undefined;
 
   const save = () => {
+    let obj = { name, username, password };
+    let p = localStorage.getItem('pass') as any;
+    p = JSON.parse(p);
+
     if (!prop) {
-      let p = localStorage.getItem('pass') as any;
-      p = JSON.parse(p);
-      let o = {
-        name: name,
-        username: username,
-        password: password
-      };
+      let o = obj;
       if (p !== null) {
         p.push(o);
         localStorage.setItem('pass', JSON.stringify(p));
       } else
         localStorage.setItem('pass', JSON.stringify([o]));
-      return history.replace('/vault');
     } else {
-      let p = localStorage.getItem('Pass') as any;
-      p = JSON.parse(p);
-      p[name] = {
-        name: name,
-        username: username,
-        password: password
+      let i = 0;
+      for (i; p[i]; ++i) {
+        if (p[i].name === saveName) {
+          break ;
+        }
       }
-      return ;
-
-      // TODO Verifie que cette merde fonctionne
+      p[i] = obj
+      localStorage.setItem('pass', JSON.stringify(p));
     }
+    return history.replace('/vault');
   }
 
   return (
@@ -60,7 +57,7 @@ const New = () => {
           src="https://img.icons8.com/ios-filled/50/000000/back.png"
           onClick={() => history.replace('/vault')}
         />
-        <p className='title'>{ name === '' ? 'Create new' : 'Modify' }</p>
+        <p className='title'>{ saveName === undefined ? 'Create new' : 'Modify' }</p>
         <img
           className='nav'
           height='40'
@@ -73,7 +70,7 @@ const New = () => {
 
       {/* Form */}
       <div className='mainn'>
-        <p className='titlen'>New password</p>
+        <p className='titlen'>{ saveName === undefined ? 'New password' : 'Edit password' }</p>
         <input
           type='text'
           value={name}
@@ -92,9 +89,16 @@ const New = () => {
           <input
             type='text'
             value={isPwsViewable ? password : '*'.repeat(password.length)}
+            onKeyDown={(e) => {
+              if (e.which === 8) // if backspace
+                return setPassword(str => str.slice(0, -1));
+              else if (e.which === 13) // if Enter
+                return save();
+              else if (e.key.length === 1)
+                return setPassword(p => p.concat(e.key));
+            }}
             placeholder='Password'
             className='inputn'
-            onChange={(e) => setPassword(e.target.value)}
           />
           <img
             src={!isPwsViewable ?

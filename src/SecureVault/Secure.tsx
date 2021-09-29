@@ -18,7 +18,9 @@ const Secure = () => {
           alert(err);
           return setMsg('Error setting your password');
         }
-        return localStorage.setItem('password', hash);
+        localStorage.setItem('password', hash);
+        setIfPswSet(true);
+        return alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
       });
     } else {
       bcrypt.compare(input, p, (err: any, result: boolean) => {
@@ -34,14 +36,17 @@ const Secure = () => {
   };
 
   useEffect(() => {
+    if (isPswSet)
+      return setMsg('');
+    return setMsg('Please set your master password by typing it in the input field');
+  }, [isPswSet]);
+
+  useEffect(() => {
     require('dotenv').config()
     let p = localStorage.getItem('password');
 
-    if (p === undefined || p === null) {
-      setIfPswSet(false);
-      return setMsg('Please set your Master Password !');
-    }
-    // localStorage.clear();
+    if (p === undefined || p === null)
+      return setIfPswSet(false);
     return setIfPswSet(true);
   }, [])
 

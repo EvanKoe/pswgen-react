@@ -2,16 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './Vault.css';
 
-//? Images
-import Open from '../assets/open.png';
-import Key from '../assets/key.png';
-import User from '../assets/name.png';
-import Bin from '../assets/bin.png';
-
-//todo TO DO :
-//todo sync on GDrive
-//todo Timer to lock the vault
-
 const Vault = () => {
   const history = useHistory();
   const [psw, setPsw] = useState(undefined) as any;
@@ -28,18 +18,24 @@ const Vault = () => {
 
   const removeItem = (item: any, index: number) => {
     const p = [...psw];
+
+    if (p.length === 1) {
+      localStorage.removeItem('pass');
+      return setPsw(undefined);
+    }
     p.splice(index, 1);
     localStorage.setItem('pass', JSON.stringify(p));
     return setPsw(p);
   }
 
-  const toClipboard = (string: string, display: boolean) => {
+  const toClipboard = async (string: string, display: boolean) => {
     navigator.clipboard.writeText(string)
+
     if (!display)
       setMsg('Password copied to your clipboard !');
     else
       setMsg('\'' + string + '\' copied to your clipbord !');
-    setTimeout(() => {
+    await setTimeout(() => {
       return setMsg('');
     }, 2000);
   }
@@ -103,7 +99,7 @@ const Vault = () => {
 
       {/* Password list */}
       <div style={(psw === undefined) ? { textAlign: 'center' } : {}} className="mainv">
-        <p className="msg"> { msg } </p>
+        <p className="msg">{ msg }</p>
         {psw === undefined ? (
           <>
           <p className="emptyText">Nothing to see here</p>
@@ -129,8 +125,12 @@ const Vault = () => {
                 })}
               />
               <div style={{ flex: 1 }}>
-                <p className='pswTextName'>{item.name}</p>
-                <p className='pswTextP'>{item.username}</p>
+                <p className='pswTextName'>{
+                  item.name.length > 12 ? item.name.substring(0, 10) + '...' : item.name
+                }</p>
+                <p className='pswTextP'>{
+                  item.username.length > 20 ? item.username.substring(0, 20) + '...' : item.username
+                }</p>
               </div>
               <img
                 src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiIGNsYXNzPSIiPjxnPjxsaW5rIHR5cGU9InRleHQvY3NzIiBpZD0iZGFyay1tb2RlIiByZWw9InN0eWxlc2hlZXQiIGhyZWY9IiI+PC9saW5rPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgoJPGc+CgkJPHBhdGggZD0iTTI1NiwwYy03NC40MzksMC0xMzUsNjAuNTYxLTEzNSwxMzVzNjAuNTYxLDEzNSwxMzUsMTM1czEzNS02MC41NjEsMTM1LTEzNVMzMzAuNDM5LDAsMjU2LDB6IE0yNTYsMjQwICAgIGMtNTcuODk3LDAtMTA1LTQ3LjEwMy0xMDUtMTA1YzAtNTcuODk3LDQ3LjEwMy0xMDUsMTA1LTEwNWM1Ny44OTcsMCwxMDUsNDcuMTAzLDEwNSwxMDVDMzYxLDE5Mi44OTcsMzEzLjg5NywyNDAsMjU2LDI0MHoiIGZpbGw9IiNmN2Y3ZjciIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIHN0eWxlPSIiIGNsYXNzPSIiPjwvcGF0aD4KCTwvZz4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgoJPGc+CgkJPHBhdGggZD0iTTQyMy45NjYsMzU4LjE5NUMzODcuMDA2LDMyMC42NjcsMzM4LjAwOSwzMDAsMjg2LDMwMGgtNjBjLTUyLjAwOCwwLTEwMS4wMDYsMjAuNjY3LTEzNy45NjYsNTguMTk1ICAgIEM1MS4yNTUsMzk1LjUzOSwzMSw0NDQuODMzLDMxLDQ5N2MwLDguMjg0LDYuNzE2LDE1LDE1LDE1aDQyMGM4LjI4NCwwLDE1LTYuNzE2LDE1LTE1ICAgIEM0ODEsNDQ0LjgzMyw0NjAuNzQ1LDM5NS41MzksNDIzLjk2NiwzNTguMTk1eiBNNjEuNjYsNDgyYzcuNTE1LTg1LjA4Niw3OC4zNTEtMTUyLDE2NC4zNC0xNTJoNjAgICAgYzg1Ljk4OSwwLDE1Ni44MjUsNjYuOTE0LDE2NC4zNCwxNTJINjEuNjZ6IiBmaWxsPSIjZjdmN2Y3IiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBzdHlsZT0iIiBjbGFzcz0iIj48L3BhdGg+Cgk8L2c+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg=="
