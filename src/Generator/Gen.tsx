@@ -135,7 +135,7 @@ const Generator = () => {
         onClick={() => gen()}
         className="button genBtn"
       />
-      <input type='button' onClick={() => localStorage.clear()} value='CLEAR' />
+	  {/* <input type='button' onClick={() => localStorage.clear()} value='CLEAR' /> */}
     </div>
   );
 };
