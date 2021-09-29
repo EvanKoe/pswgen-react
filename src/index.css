@@ -38,6 +38,6 @@ code {
 }
 
 .nav:hover {
-  opacity: 50%;
+  opacity: 70%;
   transition: all 0.2s ease-in-out;
 }
