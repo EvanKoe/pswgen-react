@@ -13,6 +13,8 @@ const Secure = () => {
 
   const verify = () => {
     let p = localStorage.getItem('password') as string;
+    if (!p)
+      setIfPswSet(false);
 
     if (!isPswSet) {
       let l = CryptoJs.AES.encrypt("validated", input.toString());
@@ -20,7 +22,7 @@ const Secure = () => {
       setIfPswSet(true);
       return alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
     } else {
-      let l = CryptoJs.AES.decrypt(p, input);
+      let l = CryptoJs.AES.decrypt(p, input.toString());
       l = l.toString(CryptoJs.enc.Utf8);
 
       if (l === 'validated') {

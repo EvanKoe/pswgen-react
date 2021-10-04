@@ -11,12 +11,25 @@ const Vault = ({ location }: any) => {
   const [srch, setSrch] = useState('');
   const [msg, setMsg] = useState('');
 
-  const filter = () => {
-    let p = localStorage.getItem('pass') as any;
+  const maj = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
-    if (srch === '')
-      return setPsw(JSON.parse(p));
-    return setPsw(psw.filter((word: any) => word.name.includes(srch)))
+  const filter = () => {
+    let p = getPasswords() as [];
+
+    return setPsw(p.filter((word: any) =>
+      word.name.toLowerCase().includes(srch.toLowerCase())
+    ));
+  }
+
+  const getPasswords = () => {
+    let p = localStorage.getItem('pass') as any;
+    if (p === undefined || p === null)
+      return p;
+    p = CryptoJs.AES.decrypt(p, input);
+    p = JSON.parse(p.toString(CryptoJs.enc.Utf8));
+    return [...p];
   }
 
   const removeItem = (item: any, index: number) => {
@@ -94,11 +107,12 @@ const Vault = ({ location }: any) => {
         <input
           type="text"
           placeholder="Research"
-          onKeyDown={(e) => {
-            if (e.code === 'Enter')
-              filter()
+          onChange={(e) => {
+            if (e?.target?.value === '')
+              return setPsw(getPasswords());
+            setSrch(e.target.value);
+            return filter();
           }}
-          onChange={(e) => setSrch(e.target.value)}
           className='inputv'
         />
         <img
