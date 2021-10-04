@@ -3,6 +3,8 @@ import { useHistory } from 'react-router';
 import * as bcrypt from 'bcryptjs';
 import './Secure.css';
 
+const CryptoJs = require('crypto-js');
+
 const Secure = () => {
   const [input, setInput] = useState('');
   const [isPswSet, setIfPswSet] = useState(false);
@@ -13,25 +15,19 @@ const Secure = () => {
     let p = localStorage.getItem('password') as string;
 
     if (!isPswSet) {
-      bcrypt.hash(input, 0, (err: any, hash: string) => {
-        if (err) {
-          alert(err);
-          return setMsg('Error setting your password');
-        }
-        localStorage.setItem('password', hash);
-        setIfPswSet(true);
-        return alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
-      });
+      let l = CryptoJs.AES.encrypt("validated", input.toString());
+      localStorage.setItem('password', l);
+      setIfPswSet(true);
+      return alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
     } else {
-      bcrypt.compare(input, p, (err: any, result: boolean) => {
-        if (err) {
-          console.log(err);
-          return setMsg('Server error')
-        } else if (result)
-          history.replace('/vault');
-        else
-          setMsg('Wrong password !');
-      });
+      let l = CryptoJs.AES.decrypt(p, input);
+      l = l.toString(CryptoJs.enc.Utf8);
+
+      if (l === 'validated') {
+        history.replace('/vault', {input: input});
+      } else {
+        setMsg('Wrong password. Please try again.');
+      }
     }
   };
 

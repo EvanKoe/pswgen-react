@@ -2,47 +2,65 @@ import React, { useState } from 'react'
 import { useHistory, useLocation } from 'react-router';
 import './New.css';
 
+const CryptoJs = require("crypto-js");
+
 interface LocaState {
   props: {
     gname: string;
     gusername: string;
     gpassword: string;
+    psw: string;
   };
 };
 
-const New = () => {
+const New = ({ location }: any) => {
   const history = useHistory()
-  let state = useLocation().state as LocaState;
-  let prop = state && state.props ? state.props : undefined;
-  const [name, setName] = useState(prop === undefined ? '' : prop.gname);
-  const [username, setUsername] = useState(prop === undefined ? '' : prop.gusername);
-  const [password, setPassword] = useState(prop === undefined ? '' : prop.gpassword);
+  let props = location?.state;
+  const psw = props?.psw;
+  const [name, setName] = useState<string>(props && props.gname ? props.gname : '');
+  const [username, setUsername] = useState<string>(props && props.gusername ? props.gusername : '');
+  const [password, setPassword] = useState<string>(props && props.gpassword ? props.gpassword : '');
   const [isPwsViewable, setIfPwsViewable] = useState(false);
-  const saveName = prop ? prop.gname : undefined;
+  const saveName = props && props.gname ? props.gname : undefined;
+  const [msg, setMsg] = useState<string | undefined>(undefined);
+
+  const fieldEmpty = ({ name, username, password }: any) => {
+    if (name === '' || username === '' || password === '')
+      return true;
+    else if (!name || !username || !password)
+      return true;
+    return false;
+  }
 
   const save = () => {
     let obj = { name, username, password };
     let p = localStorage.getItem('pass') as any;
-    p = JSON.parse(p);
+    if (p) {
+      p = CryptoJs.AES.decrypt(p, psw);
+      p = JSON.parse(p.toString(CryptoJs.enc.Utf8));
+    }
+    if (fieldEmpty(obj))
+      return setMsg('Please fill all the fields')
 
-    if (!prop) {
+    if (!props.gusername && !props.gpassword && !props.gname) {
       let o = obj;
       if (p !== null) {
         p.push(o);
-        localStorage.setItem('pass', JSON.stringify(p));
+        p = CryptoJs.AES.encrypt(JSON.stringify(p), psw).toString();
       } else
-        localStorage.setItem('pass', JSON.stringify([o]));
+        p = CryptoJs.AES.encrypt(JSON.stringify([o]), psw).toString();
     } else {
       let i = 0;
-      for (i; p[i]; ++i) {
+      for (i; p && p[i]; ++i) {
         if (p[i].name === saveName) {
           break ;
         }
       }
-      p[i] = obj
-      localStorage.setItem('pass', JSON.stringify(p));
+      p[i] = obj;
+      p = CryptoJs.AES.encrypt(JSON.stringify(p), psw).toString();
     }
-    return history.replace('/vault');
+    localStorage.setItem('pass', p);
+    return history.replace('/vault', {input: psw});
   }
 
   return (
@@ -55,17 +73,9 @@ const New = () => {
           width='40'
           alt='Go back'
           src="https://img.icons8.com/ios-filled/50/000000/back.png"
-          onClick={() => history.replace('/vault')}
+          onClick={() => history.replace('/vault', {input: psw})}
         />
         <p className='title'>{ saveName === undefined ? 'Create new' : 'Modify' }</p>
-        <img
-          className='nav'
-          height='40'
-          width='40'
-          alt='Save'
-          src="https://img.icons8.com/ios-glyphs/30/000000/save--v1.png"
-          onClick={() => save()}
-        />
       </div>
 
       {/* Form */}
@@ -88,7 +98,7 @@ const New = () => {
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <input
             type='text'
-            value={isPwsViewable ? password : '*'.repeat(password.length)}
+            value={password && (isPwsViewable ? password : '*'.repeat(password.length))}
             onKeyDown={(e) => {
               if (e.which === 8) // if backspace
                 return setPassword(str => str.slice(0, -1));
@@ -111,13 +121,16 @@ const New = () => {
             onClick={() => setIfPwsViewable(e => !e)}
           />
         </div>
-        <input
-          type='button'
-          style={{ float: 'right', marginRight: '30px' }}
-          className='button'
-          onClick={save}
-          value='Save'
-        />
+        <div className='horizontal' style={{ backgroundColor: '#212121' }}>
+          <p className='errorMsg'>{ msg ? msg : '' }</p>
+          <input
+            type='button'
+            className='button'
+            style={{ float: 'right', marginRight: '30px' }}
+            onClick={save}
+            value='Save'
+          />
+        </div>
       </div>
     </div>
   )

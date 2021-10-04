@@ -28,3 +28,9 @@
   vertical-align: middle;
   align-items: center;
 }
+
+.errorMsg {
+  color: #aa0000;
+  font-weight: bold;
+  padding-left: 20px;
+}

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './Vault.css';
 
-const Vault = () => {
+const CryptoJs = require('crypto-js');
+
+const Vault = ({ location }: any) => {
   const history = useHistory();
+  const input = location?.state?.input;
   const [psw, setPsw] = useState(undefined) as any;
   const [srch, setSrch] = useState('');
   const [msg, setMsg] = useState('');
@@ -24,7 +27,8 @@ const Vault = () => {
       return setPsw(undefined);
     }
     p.splice(index, 1);
-    localStorage.setItem('pass', JSON.stringify(p));
+    let l = CryptoJs.AES.encrypt(JSON.stringify(p), input).toString();
+    localStorage.setItem('pass', l);
     return setPsw(p);
   }
 
@@ -42,11 +46,20 @@ const Vault = () => {
 
   useEffect(() => {
     let p = localStorage.getItem('pass') as any;
-    p = JSON.parse(p);
+    if (!input) {
+      alert('Security error: please reload.');
+      return history.replace('/');
+    }
+    let t = input.toString();
+    let d = undefined;
 
-    if (p !== undefined && p !== null)
-      setPsw(p);
-  }, [])
+    if (p !== undefined && p !== null) {
+      d = CryptoJs.AES.decrypt(p, t);
+      d = JSON.parse(d.toString(CryptoJs.enc.Utf8));
+      return setPsw(d);
+    }
+    return setPsw(undefined);
+  }, []);
 
   return (
     <div className="container">
@@ -93,7 +106,7 @@ const Vault = () => {
           alt='add an entry'
           className='nav2btn'
           height='50vh'
-          onClick={() => history.replace('/new')}
+          onClick={() => history.replace('/new', {psw: input})}
         />
       </div>
 
@@ -113,15 +126,11 @@ const Vault = () => {
                 width='40'
                 height='40'
                 className='openImg animatedButton'
-                onClick={() => history.replace({
-                  pathname: '/new',
-                  state: {
-                    props: {
-                      gname: item.name,
-                      gusername: item.username,
-                      gpassword: item.password
-                    }
-                  }
+                onClick={() => history.replace('/new', {
+                  psw: input,
+                  gname: item.name,
+                  gusername: item.username,
+                  gpassword: item.password
                 })}
               />
               <div style={{ flex: 1 }}>
