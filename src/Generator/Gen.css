@@ -30,18 +30,23 @@
 }
 
 .img {
-  background-color: #ddd;
-  border-radius: 15px;
-  padding: 1em;
-  margin: 0 1.5em;
-  float: inline-end;
+  fill: #ddd;
+  margin-left: auto;
+  animation: all 0.2s ease-in-out;
+}
+
+.img:hover {
+  fill: #bbb;
 }
 
 .pswDiv {
-  border-radius: 10px;
+  display: flex;
+  border-radius: 20px;
   background-color: #525252;
-  margin: 0.5em 10%;
-  margin-top: 2em;
+  margin: 32px 5%;
+  padding: 16px 32px;
+  justify-content: center;
+  align-items: center;
 }
 
 .genBtn {
@@ -93,3 +98,12 @@ input.checkboxes {
   height: 25px;
 }
 
+.lenBtn {
+  animation: fill 0.2s ease-in-out;
+  fill: rgb(121, 121, 238);
+  padding: 10px;
+}
+
+.lenBtn:hover {
+  fill: rgb(101, 101, 208)
+}

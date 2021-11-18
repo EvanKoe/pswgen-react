@@ -12,11 +12,12 @@
 
 .animatedButton {
   transition: all 0.2s ease-in;
+  fill: #fff;
+  padding: 10px;
 }
 
 .animatedButton:hover {
-  transition: all 0.2s ease-in;
-  opacity: 70%;
+  fill: #ccc;
 }
 
 .nav2btn {

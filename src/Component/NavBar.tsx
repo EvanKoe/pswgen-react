@@ -4,17 +4,18 @@ import { useHistory } from 'react-router-dom';
 import { ReactComponent as GenImg } from '../assets/gen.svg';
 import { ReactComponent as VaultImg } from '../assets/vault.svg';
 
-const NavBar = () => {
+const NavBar = ({ title = 'Title', active = 0 }) => {
   const history = useHistory();
 
   return (
     <div className="navbar">
       <GenImg
-        className="nav active"
+        className={active === 0 ? 'nav active' : 'nav'}
+        onClick={() => history.replace('/')}
       />
-      <p className="title">Password generator</p>
+      <p className="title">{ title }</p>
       <VaultImg
-        className="nav"
+        className={active === 1 ? 'nav active' : 'nav'}
         onClick={() => history.replace('/securevault')}
       />
     </div>

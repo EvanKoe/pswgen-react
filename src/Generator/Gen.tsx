@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import './Gen.css';
 import NavBar from '../Component/NavBar';
+import { ReactComponent as DecBtn } from '../assets/decrease.svg';
+import { ReactComponent as IncBtn } from '../assets/increase.svg';
+import { ReactComponent as CopyBtn } from '../assets/copy.svg';
 
 const ns = '0123456789,;:=?./+ù%^$*][}{)(-_';
 const n = '0123456789';
@@ -61,45 +64,31 @@ const Generator = () => {
 
   return (
     <div className="App">
-      <NavBar />  {/* send title props */}
+      <NavBar title='Password Generator' active={0} />  {/* send title props */}
       <div className="pswDiv">
-        <p
-          className="rowDiv psw"
-        >{password}</p>
-        <img
+        <p className="rowDiv psw noMarginBlock">{ password }</p>
+        <CopyBtn
           className="rowDiv img"
-          alt="Copy"
-          src="https://img.icons8.com/material-outlined/48/000000/copy.png"
           onClick={toClip}
           height={20}
           width={20}
         />
       </div>
-      <p className="errorMsg">{error}</p>
-      <p
-        className="errorMsg copied"
-      >{copied}</p>
-      <div>
-        <p
-          className="rowDiv psw"
-        > Length : </p>
-        <input
-          type="button"
-          onClick={() => setL(len - 1)}
-          value='-'
-          className="button rowDiv size30"
-          style={{ padding: '10px 15px', marginLeft: 5 }}
-        />
-        <p
-          className="rowDiv size30 textCol"
-        >{len}</p>
-        <input
-          type="button"
-          onClick={() => setL(len + 1)}
-          value='+'
-          className="button rowDiv size30"
-          style={{ padding: '10px 15px' }}
-        />
+      <p className="errorMsg">{ error }</p>
+      <p className="errorMsg copied">{ copied }</p>
+      <div className='optionDiv'>
+        <p className="rowDiv check">Length :</p>
+        <div className='rowDiv checkboxes' style={{ marginLeft: 'auto' }}>
+          <DecBtn
+            onClick={() => setL(len - 1)}
+            className="rowDiv lenBtn"
+          />
+          <p className="rowDiv size30 textCol noMarginBlock">{ len }</p>
+          <IncBtn
+            onClick={() => setL(len + 1)}
+            className="rowDiv lenBtn"
+          />
+        </div>
       </div>
       <div>
         <div className='optionDiv'>
@@ -121,7 +110,7 @@ const Generator = () => {
           />
         </div>
       </div>
-      <div style={{ flexDirection: 'row' }}>
+      <div style={{ flexDirection: 'row', marginTop: 32 }}>
         <input
           type="button"
           value="Generate"

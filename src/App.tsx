@@ -1,20 +1,18 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import React, { Suspense, lazy } from 'react';
 
-const Generator = lazy(() => import('./Generator/Gen'));
-const Vault = lazy(() => import('./Vault/Vault'));
-const Secure = lazy(() => import('./SecureVault/Secure'));
-const New = lazy(() => import('./NewEntry/New'));
+import Generator from './Generator/Gen';
+import Secure from './SecureVault/Secure';
+import Vault from './Vault/Vault';
+import New from './NewEntry/New';
 
 const App = () => {
   return (
     <BrowserRouter basename="/index.html">
-      <Suspense fallback={<p>Loading...</p>}>
-        <Route exact path="/" component={Generator}/>
-        <Route exact path="/securevault" component={Secure}/>
-        <Route exact path="/vault" component={Vault}/>
-        <Route exact path="/new" component={New}/>
-      </Suspense>
+      <Route exact path="/" component={Generator}/>
+      <Route exact path="/securevault" component={Secure}/>
+      <Route exact path="/vault" component={Vault}/>
+      <Route exact path="/new" component={New}/>
     </BrowserRouter>
   );
 };
