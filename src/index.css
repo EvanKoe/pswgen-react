@@ -19,25 +19,33 @@ code {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-top: .5em;
-  height: auto;
+  height: 50px;
+  padding: 0 10px;
+  vertical-align: middle;
 }
 
 .nav {
-  height: 90%;
-  padding: 10px;
-  margin: 0 10px;
+  transition: fill 0.2s ease-in-out;
+  max-height: 40px;
+  min-height: 20px;
+  max-width: 40px;
+  min-width: 20px;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 5px 0;
 }
 
 .title {
-  color: white;
-  margin: auto;
-  padding: 1em 0;
+  color: #fff;
   font-size: 25px;
   font-weight: bolder;
+  margin: auto;
 }
 
 .nav:hover {
-  opacity: 70%;
-  transition: all 0.2s ease-in-out;
+  fill: #ddd;
+}
+
+.active {
+  fill: #fff;
 }

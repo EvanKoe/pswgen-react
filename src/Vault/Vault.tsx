@@ -52,7 +52,7 @@ const Vault = ({ location }: any) => {
       setMsg('Password copied to your clipboard !');
     else
       setMsg('\'' + string + '\' copied to your clipbord !');
-    await setTimeout(() => {
+    setTimeout(() => {
       return setMsg('');
     }, 2000);
   }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import './Gen.css';
+import NavBar from '../Component/NavBar';
 
 const ns = '0123456789,;:=?./+ù%^$*][}{)(-_';
 const n = '0123456789';
@@ -54,22 +55,13 @@ const Generator = () => {
     setCopied('Password copied in your clipboard !')
   }
 
+  const save = () => {
+    history.replace('/new', { psw: password });
+  }
+
   return (
     <div className="App">
-      <div className="navbar">
-        <img
-          className="nav active"
-          alt="Password generator"
-          src="https://img.icons8.com/ios/50/000000/password--v1.png"
-        />
-        <p className="title">Password generator</p>
-        <img
-          className="nav"
-          alt="Your vault"
-          src="https://img.icons8.com/pastel-glyph/50/000000/safe--v2.png"
-          onClick={() => history.replace('/securevault')}
-        />
-      </div>
+      <NavBar />  {/* send title props */}
       <div className="pswDiv">
         <p
           className="rowDiv psw"
@@ -100,7 +92,7 @@ const Generator = () => {
         />
         <p
           className="rowDiv size30 textCol"
-        > {len} </p>
+        >{len}</p>
         <input
           type="button"
           onClick={() => setL(len + 1)}
@@ -129,13 +121,26 @@ const Generator = () => {
           />
         </div>
       </div>
-      <input
-        type="button"
-        value="Generate"
-        onClick={() => gen()}
-        className="button genBtn"
-      />
-	  <input type='button' onClick={() => localStorage.clear()} value='CLEAR' />
+      <div style={{ flexDirection: 'row' }}>
+        <input
+          type="button"
+          value="Generate"
+          onClick={gen}
+          className="button genBtn"
+        />
+        <input
+          type="button"
+          value="Save"
+          onClick={() => alert('This feature doesn\'t work at the moment')}
+          className="button genBtn"
+        />
+        <input
+          type='button'
+          onClick={() => localStorage.clear()}
+          value='Clear'
+          className='button genBtn'
+        />
+      </div>
     </div>
   );
 };

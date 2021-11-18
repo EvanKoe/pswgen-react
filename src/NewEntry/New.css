@@ -24,11 +24,6 @@
   width: 85%;
 }
 
-.nav {
-  vertical-align: middle;
-  align-items: center;
-}
-
 .errorMsg {
   color: #aa0000;
   font-weight: bold;

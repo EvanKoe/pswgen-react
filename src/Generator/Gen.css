@@ -29,14 +29,6 @@
   transition: all 0.2s ease-in;
 }
 
-.title {
-  color: white;
-  margin: auto;
-  padding: 1em 0;
-  font-size: 25px;
-  font-weight: bolder;
-}
-
 .img {
   background-color: #ddd;
   border-radius: 15px;
@@ -46,7 +38,7 @@
 }
 
 .pswDiv {
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: #525252;
   margin: 0.5em 10%;
   margin-top: 2em;
@@ -101,14 +93,3 @@ input.checkboxes {
   height: 25px;
 }
 
-.active {
-  background: #ffffff99;
-  border-radius: 15px;
-}
-
-.nav {
-  height: 90%;
-  padding: 10px;
-  margin: 0 10px;
-  transition: all 0.2s ease-in;
-}
