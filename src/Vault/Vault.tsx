@@ -7,6 +7,8 @@ import { ReactComponent as BinBtn } from '../assets/bin.svg';
 import { ReactComponent as UserBtn } from '../assets/user.svg';
 import { ReactComponent as KeyBtn } from '../assets/key.svg';
 import { ReactComponent as OpenBtn } from '../assets/open.svg';
+import { ReactComponent as PlusBtn } from '../assets/increase.svg';
+import { ReactComponent as LockBtn } from '../assets/lock.svg';
 
 const CryptoJs = require('crypto-js');
 
@@ -16,10 +18,6 @@ const Vault = ({ location }: any) => {
   const [psw, setPsw] = useState(undefined) as any;
   const [srch, setSrch] = useState('');
   const [msg, setMsg] = useState('');
-
-  const maj = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
 
   const filter = () => {
     let p = getPasswords() as [];
@@ -31,8 +29,9 @@ const Vault = ({ location }: any) => {
 
   const getPasswords = () => {
     let p = localStorage.getItem('pass') as any;
-    if (p === undefined || p === null)
+    if (p === undefined || p === null) {
       return p;
+    }
     p = CryptoJs.AES.decrypt(p, input);
     p = JSON.parse(p.toString(CryptoJs.enc.Utf8));
     return [...p];
@@ -63,6 +62,15 @@ const Vault = ({ location }: any) => {
     }, 2000);
   }
 
+  const goTo = (item: any) => {
+    return history.replace('/new', {
+      psw: input,
+      gname: item.name,
+      gusername: item.username,
+      gpassword: item.password
+    });
+  }
+
   useEffect(() => {
     let p = localStorage.getItem('pass') as any;
     if (!input) {
@@ -86,11 +94,8 @@ const Vault = ({ location }: any) => {
 
       {/* Navigation bar 2 */}
       <div className='nav2'>
-        <img
-          src="https://img.icons8.com/dotty/50/000000/lock-2.png"
-          alt='Lock your vault'
+        <LockBtn
           className='nav2btn'
-          height='50vh'
           onClick={() => history.replace('/securevault')}
         />
         <input
@@ -104,12 +109,9 @@ const Vault = ({ location }: any) => {
           }}
           className='inputv'
         />
-        <img
-          src="https://img.icons8.com/fluency-systems-filled/48/000000/plus-math.png"
-          alt='add an entry'
+        <PlusBtn
           className='nav2btn'
-          height='50vh'
-          onClick={() => history.replace('/new', {psw: input})}
+          onClick={() => history.replace('/new', { psw: input })}
         />
       </div>
 
@@ -128,21 +130,16 @@ const Vault = ({ location }: any) => {
                 width='40'
                 height='40'
                 className='openImg animatedButton'
-                onClick={() => history.replace('/new', {
-                  psw: input,
-                  gname: item.name,
-                  gusername: item.username,
-                  gpassword: item.password
-                })}
+                onClick={() => goTo(item)}
               />
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1 }} onClick={() => goTo(item)}>
                 <p className='pswTextName' >{
                   item.name.length > 11 ?
                     item.name.substring(0, 10) + '...' :
                     item.name
                 }</p>
                 <p className='pswTextP'>{
-                  item.username.length > 20 ?
+                  item.username.length > 22 ?
                     item.username.substring(0, 20) + '...' :
                     item.username
                 }</p>

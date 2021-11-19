@@ -5,6 +5,7 @@ import NavBar from '../Component/NavBar';
 import { ReactComponent as DecBtn } from '../assets/decrease.svg';
 import { ReactComponent as IncBtn } from '../assets/increase.svg';
 import { ReactComponent as CopyBtn } from '../assets/copy.svg';
+import { isPasswordSet } from '../Globals/Middlewares';
 
 const ns = '0123456789,;:=?./+ù%^$*][}{)(-_';
 const n = '0123456789';
@@ -110,25 +111,27 @@ const Generator = () => {
           />
         </div>
       </div>
-      <div style={{ flexDirection: 'row', marginTop: 32 }}>
+      <div style={{ flexDirection: 'row', marginTop: 32, display: 'flex' }}>
         <input
           type="button"
+          style={{ flex: 1 }}
           value="Generate"
           onClick={gen}
           className="button genBtn"
         />
         <input
           type="button"
+          style={{ flex: 1 }}
           value="Save"
-          onClick={() => alert('This feature doesn\'t work at the moment')}
+          onClick={() => history.replace('/securevault', { psw: password })}
           className="button genBtn"
         />
-        <input
+        {/* <input
           type='button'
           onClick={() => localStorage.clear()}
           value='Clear'
           className='button genBtn'
-        />
+        /> */}
       </div>
     </div>
   );

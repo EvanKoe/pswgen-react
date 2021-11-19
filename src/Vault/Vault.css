@@ -3,50 +3,57 @@
   display: flex;
   flex-direction: row;
   vertical-align: middle;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav2btn:hover {
-  opacity: 70%;
-  transition: all 0.2s ease-in;
+  fill: #ccc;
 }
 
 .animatedButton {
   transition: all 0.2s ease-in;
-  fill: #fff;
+  fill: #ddd;
   padding: 10px;
 }
 
 .animatedButton:hover {
-  fill: #ccc;
+  fill: #999;
 }
 
 .nav2btn {
-  padding: .2em .5em;
+  padding: 16px;
   transition: all 0.2s ease-in;
 }
 
 .eachPsw {
   display: flex;
   flex-direction: row;
-  margin-bottom: 1em;
+  margin-bottom: 8px;
 }
 
 .pswTextName {
-  color: #f7f7f7;
+  color: #ddd;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 25px;
   margin: 0 0;
   padding-top: 5px;
+  animation: color 0.2s ease-in-out;
+}
+
+.pswTextName:hover {
+  color: #999;
 }
 
 .pswTextP {
-  color: #f7f7f7;
+  color: #ccc;
   padding-top: 0;
   margin: 0;
+  animation: color 0.2s ease-in-out;
 }
 
 .emptyText {
-  color: #fff;
+  color: #ddd;
   font-weight: bold;
   margin-block-start: auto;
   padding-top: 5em;

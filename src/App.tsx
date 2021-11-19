@@ -1,5 +1,4 @@
 import { BrowserRouter, Route } from 'react-router-dom';
-import React, { Suspense, lazy } from 'react';
 
 import Generator from './Generator/Gen';
 import Secure from './SecureVault/Secure';
