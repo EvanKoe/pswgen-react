@@ -8,6 +8,11 @@ import { ReactComponent as NoEyeBtn } from '../assets/no_eye.svg';
 
 const CryptoJs = require("crypto-js");
 
+//! TODO - Patch crash
+//! When saving generated password from Gen
+//! save doesn't work, doesn't go back to
+//! vault and crashes ("cannot read property
+//! '0' of undefined")
 interface LocaState {
   props: {
     gname: string;
