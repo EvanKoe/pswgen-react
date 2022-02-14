@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavBar from '../Component/NavBar';
 import './Vault.css';
@@ -9,13 +9,15 @@ import { ReactComponent as KeyBtn } from '../assets/key.svg';
 import { ReactComponent as OpenBtn } from '../assets/open.svg';
 import { ReactComponent as PlusBtn } from '../assets/increase.svg';
 import { ReactComponent as LockBtn } from '../assets/lock.svg';
-import { getMasterPassword, getPasswords } from '../Globals/Middlewares';
+import { getPasswords } from '../Globals/Middlewares';
+import { globales } from '../Globals/Context';
 
 const CryptoJs = require('crypto-js');
 
 const Vault = ({ location }: any) => {
   const history = useHistory();
-  const input = getMasterPassword();
+  const context = useContext(globales);
+  const input = context?.master;
   const [psw, setPsw] = useState<string | undefined>(undefined) as any;
   const [srch, setSrch] = useState<string>('');
   const [msg, setMsg] = useState<string>('');
@@ -81,31 +83,20 @@ const Vault = ({ location }: any) => {
   }
 
   useEffect(() => {
-    let p = localStorage.getItem('pass') as any;
-    if (input === undefined) {
-      alert('Security error: please reload.');
-      return history.replace('/');
-    }
-    let t = input.toString();
-    let d = undefined;
+    let d: any[] = [];
 
-    if (p !== undefined && p !== null) {
-      try {
-        d = CryptoJs.AES.decrypt(p, t);
-      } catch (e) {
-        console.log(e);
-        setMsg('Error parsing your passwords... Please try again.');
-        return setPsw(undefined);
+    try {
+      let m: string | undefined = context?.master;
+      if (m === undefined) {
+        throw 'Error: wrong master password.';
       }
-      try {
-        d = JSON.parse(d.toString(CryptoJs.enc.Utf8));
-      } catch (e) {
-        console.log(e);
-        return setPsw(undefined);
-      }
-      return setPsw(d);
+      d = getPasswords(m);
+    } catch (e) {
+      console.log(e);
+      setMsg('Error parsing your passwords... Please try again.');
+      return setPsw(undefined);
     }
-    return setPsw(undefined);
+    return setPsw(d);
   }, []);
 
   return (

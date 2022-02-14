@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import './Secure.css';
 import '../index.css';
 import NavBar from '../Component/NavBar';
 import {
-  isPasswordCorrect,
-  isPasswordSet,
-  setTimeOut
-} from '../Globals/Middlewares';
-import { setMaster } from '../Globals/globales';
+  globales,
+} from '../Globals/Context';
+import { createMasterPassword, isPasswordCorrect, isPasswordSet } from '../Globals/Middlewares';
 
 const CryptoJs = require('crypto-js');
 
@@ -22,19 +20,23 @@ const Secure = ({ location }: any) => {
   const [isDisabled, setIfDisabled] = useState(false);
 
   const verify = () => {
+    const context = useContext(globales);
     let awaitTime = 0;
 
     if (!isPswSet) {
-      let l = CryptoJs.AES.encrypt("validated", input.toString());
-      localStorage.setItem('password', l);
-      localStorage.setItem('pass', CryptoJs.AES.encrypt(JSON.stringify([]), input.toString()));
+      try {
+        createMasterPassword(input);
+        context?.setMaster(input);
+      } catch (e) {
+        console.log(e);
+        return setMsg('Could not create a vault. Please try again.');
+      }
       setIfPswSet(true);
-      setMaster(input.toString());
       alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
       return setInput('');
     }
-    if (isPasswordCorrect(input.toString())) {
-      setTimeOut();
+    if (isPasswordCorrect(input)) {
+      context?.setTime(new Date());
       if (psw === undefined) {
         history.replace('/vault');
       } else {

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import './Gen.css';
 import NavBar from '../Component/NavBar';
 import { ReactComponent as DecBtn } from '../assets/decrease.svg';
 import { ReactComponent as IncBtn } from '../assets/increase.svg';
 import { ReactComponent as CopyBtn } from '../assets/copy.svg';
-import { getMasterPassword, getTimeGap, isPasswordSet } from '../Globals/Middlewares';
-import { master } from '../Globals/globales';
+import { isPasswordSet } from '../Globals/Middlewares';
+import { globales } from '../Globals/Context';
 
 const ns = '0123456789,;:=?./+ù%^$*][}{)(-_';
 const n = '0123456789';
@@ -19,6 +19,7 @@ const ftoi = (a: number) => {
 
 const Generator = () => {
   const history = useHistory();
+  const context = useContext(globales);
   const [password, setPassword] = useState('Your password !');
   const [isAlpha, setIfAlpha] = useState(true);
   const [isSpec, setIfSpec] = useState(true);
@@ -56,7 +57,9 @@ const Generator = () => {
   }
 
   const save = () => {
-    if (getTimeGap() < 120 && getMasterPassword() !== undefined) {
+    let now = new Date();
+    let timeGap = context?.time === undefined ? 0 :  now.getTime() - context.time.getTime();
+    if (timeGap < 120 && context?.master !== undefined) {
       history.replace('/new', { gpassword: password });
     } else {
       history.push({ pathname: '/securevault', state: { psw: password }});

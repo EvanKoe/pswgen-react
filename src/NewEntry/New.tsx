@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router';
 import './New.css';
 
 import { ReactComponent as BackBtn } from '../assets/back.svg';
 import { ReactComponent as EyeBtn } from '../assets/eye.svg';
 import { ReactComponent as NoEyeBtn } from '../assets/no_eye.svg';
-import { getMasterPassword, getPasswords } from '../Globals/Middlewares';
+import { getPasswords } from '../Globals/Middlewares';
+import { globales } from '../Globals/Context';
 
 const CryptoJs = require("crypto-js");
 
@@ -22,9 +23,10 @@ interface LocaState {
 
 const New = ({ location }: LocaState) => {
   const history = useHistory()
+  const context = useContext(globales);
   let props = location?.state;
   const doesEdit = props?.isEditing ? props.isEditing : false;
-  const input = getMasterPassword();
+  const input = context?.master;
   const [name, setName] = useState<string>(props?.gname ? props.gname : '');
   const [username, setUsername] = useState<string>(props?.gusername ? props.gusername : '');
   const [password, setPassword] = useState<string>(props?.gpassword ? props.gpassword : '');

@@ -1,10 +1,7 @@
-import { master, setTime, time } from "./globales";
-
 const CryptoJs = require('crypto-js');
 
 //! isPasswordCorrect will throw an error if localStorage is
 //! not set. Do not forget to try/catch !
-
 const isPasswordCorrect = (input: string) => {
   let p = undefined;
 
@@ -24,7 +21,6 @@ const isPasswordCorrect = (input: string) => {
 
 //! isPasswordSet won't throw any error
 //! It will only return a boolean
-
 const isPasswordSet = () => {
   let p = localStorage.getItem('password') as string;
   return (p ? true : false);
@@ -32,7 +28,12 @@ const isPasswordSet = () => {
 
 //! getPasswords will throw an error if the password is invalid.
 //! Do not forget to try/catch !
-
+/**
+*
+* will throw if error
+* @param masterPassword
+* @returns your passwords
+*/
 const getPasswords = (input: string) => {
   if (input && !isPasswordCorrect(input) || !input)
     throw 'Error : wrong password.';
@@ -42,34 +43,27 @@ const getPasswords = (input: string) => {
   return [...p];
 };
 
-//! setTimeOut (do not confuse with setTimeout()) will start
-//! a counter to lock the vault after 2 mins
-
-const setTimeOut = () => {
-  setTime(new Date());
-};
-
-//! getTimeGap will throw an error if time is not started
-//* it returns the result in seconds (normally)
-const getTimeGap = () => {
-  if (time === undefined) {
-    throw 'Time has not been set. Cannot calculate.';
+//! createMasterPassword will initiate the vault
+//! by creating the 'pass' localStorage item.
+//* createMasterPassword creates a new vault
+/**
+ * will throw if error
+ * @param masterPassword
+ */
+const createMasterPassword = (e: string) => {
+  console.log('createMasterPassword : ', e);
+  try {
+    let l = CryptoJs.AES.encrypt("validated", e.toString());
+    localStorage.setItem('password', l);
+    localStorage.setItem('pass', CryptoJs.AES.encrypt(JSON.stringify([]), e.toString()));
+  } catch (e) {
+    throw e;
   }
-  return (new Date().getTime() - time.getTime()) / 1000;
 };
-
-//! getMasterPassword will return the master password
-//! it won't throw an error if undefined.
-
-const getMasterPassword = () => {
-  return master ? master : undefined;
-}
 
 export {
   isPasswordCorrect,
-  isPasswordSet,
   getPasswords,
-  setTimeOut,
-  getTimeGap,
-  getMasterPassword
-}
+  isPasswordSet,
+  createMasterPassword
+};
