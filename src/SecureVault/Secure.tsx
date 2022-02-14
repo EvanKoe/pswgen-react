@@ -3,7 +3,12 @@ import { useHistory } from 'react-router';
 import './Secure.css';
 import '../index.css';
 import NavBar from '../Component/NavBar';
-import { isPasswordCorrect, isPasswordSet } from '../Globals/Middlewares';
+import {
+  isPasswordCorrect,
+  isPasswordSet,
+  setTimeOut
+} from '../Globals/Middlewares';
+import { setMaster } from '../Globals/globales';
 
 const CryptoJs = require('crypto-js');
 
@@ -24,14 +29,16 @@ const Secure = ({ location }: any) => {
       localStorage.setItem('password', l);
       localStorage.setItem('pass', CryptoJs.AES.encrypt(JSON.stringify([]), input.toString()));
       setIfPswSet(true);
+      setMaster(input.toString());
       alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
       return setInput('');
     }
     if (isPasswordCorrect(input.toString())) {
+      setTimeOut();
       if (psw === undefined) {
-        history.replace('/vault', { input: input });
+        history.replace('/vault');
       } else {
-        history.replace('/new', { input: input, gpassword: psw })
+        history.replace('/new', { gpassword: psw })
       }
     }
     switch (nbOfAttemps) {

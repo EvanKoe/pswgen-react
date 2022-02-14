@@ -9,32 +9,40 @@ import { ReactComponent as KeyBtn } from '../assets/key.svg';
 import { ReactComponent as OpenBtn } from '../assets/open.svg';
 import { ReactComponent as PlusBtn } from '../assets/increase.svg';
 import { ReactComponent as LockBtn } from '../assets/lock.svg';
+import { getMasterPassword, getPasswords } from '../Globals/Middlewares';
 
 const CryptoJs = require('crypto-js');
 
 const Vault = ({ location }: any) => {
   const history = useHistory();
-  const input = location?.state?.input;
+  const input = getMasterPassword();
   const [psw, setPsw] = useState<string | undefined>(undefined) as any;
   const [srch, setSrch] = useState<string>('');
   const [msg, setMsg] = useState<string>('');
+  let p: [] = [];
 
   const filter = () => {
-    let p = getPasswords() as [];
+    getPsw();
 
     return setPsw(p.filter((word: any) =>
       word.name.toLowerCase().includes(srch.toLowerCase())
     ));
   }
 
-  const getPasswords = () => {
-    let p = localStorage.getItem('pass') as any;
-    if (p === undefined || p === null) {
-      return p;
+  //* get passwords with error gestion
+  const getPsw = () => {
+    let y = [];
+
+    try {
+      if (input === undefined) {
+        throw 'Password undefined. Security error.'
+      }
+      y = getPasswords(input);
+      setPsw(y);
+    } catch (e) {
+      console.log(e);
+      setMsg('Wrong password ! Please try again.');
     }
-    p = CryptoJs.AES.decrypt(p, input);
-    p = JSON.parse(p.toString(CryptoJs.enc.Utf8));
-    return [...p];
   }
 
   const removeItem = (item: any, index: number) => {
@@ -74,7 +82,7 @@ const Vault = ({ location }: any) => {
 
   useEffect(() => {
     let p = localStorage.getItem('pass') as any;
-    if (!input) {
+    if (input === undefined) {
       alert('Security error: please reload.');
       return history.replace('/');
     }
@@ -115,7 +123,7 @@ const Vault = ({ location }: any) => {
           placeholder="Research"
           onChange={(e) => {
             if (e?.target?.value === '')
-              return setPsw(getPasswords());
+              return setPsw(getPsw());
             setSrch(e.target.value);
             return filter();
           }}
@@ -123,7 +131,7 @@ const Vault = ({ location }: any) => {
         />
         <PlusBtn
           className='nav2btn'
-          onClick={() => history.replace('/new', { input: input })}
+          onClick={() => history.replace('/new', { input })}
         />
       </div>
 

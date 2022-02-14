@@ -5,7 +5,8 @@ import NavBar from '../Component/NavBar';
 import { ReactComponent as DecBtn } from '../assets/decrease.svg';
 import { ReactComponent as IncBtn } from '../assets/increase.svg';
 import { ReactComponent as CopyBtn } from '../assets/copy.svg';
-import { isPasswordSet } from '../Globals/Middlewares';
+import { getMasterPassword, getTimeGap, isPasswordSet } from '../Globals/Middlewares';
+import { master } from '../Globals/globales';
 
 const ns = '0123456789,;:=?./+ù%^$*][}{)(-_';
 const n = '0123456789';
@@ -55,7 +56,11 @@ const Generator = () => {
   }
 
   const save = () => {
-    history.push({ pathname: '/securevault', state: { psw: password }});
+    if (getTimeGap() < 120 && getMasterPassword() !== undefined) {
+      history.replace('/new', { gpassword: password });
+    } else {
+      history.push({ pathname: '/securevault', state: { psw: password }});
+    }
   }
 
   return (

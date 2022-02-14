@@ -5,23 +5,26 @@ import './New.css';
 import { ReactComponent as BackBtn } from '../assets/back.svg';
 import { ReactComponent as EyeBtn } from '../assets/eye.svg';
 import { ReactComponent as NoEyeBtn } from '../assets/no_eye.svg';
-import { getPasswords } from '../Globals/Middlewares';
+import { getMasterPassword, getPasswords } from '../Globals/Middlewares';
 
 const CryptoJs = require("crypto-js");
 
 interface LocaState {
-  gname: string;            // actual name for edit
-  gusername: string;        // actual username for edit
-  gpassword: string;        // actual password for edit | password from generator
-  input: string | undefined;// vault password (aka input)
-  isEditing?: boolean       // does it edit or does it make a new entry ?
+  location: {
+    state: {
+      gname: string;            // actual name for edit
+      gusername: string;        // actual username for edit
+      gpassword: string;        // actual password for edit | password from generator
+      isEditing?: boolean       // does it edit or does it make a new entry ?
+    }
+  }
 };
 
-const New = ({ location }: any) => {
+const New = ({ location }: LocaState) => {
   const history = useHistory()
   let props = location?.state;
   const doesEdit = props?.isEditing ? props.isEditing : false;
-  const input = props?.input ? props.input : undefined;
+  const input = getMasterPassword();
   const [name, setName] = useState<string>(props?.gname ? props.gname : '');
   const [username, setUsername] = useState<string>(props?.gusername ? props.gusername : '');
   const [password, setPassword] = useState<string>(props?.gpassword ? props.gpassword : '');
@@ -29,19 +32,12 @@ const New = ({ location }: any) => {
   const saveName = props?.gname ? props.gname : undefined;
   const [msg, setMsg] = useState<string | undefined>(undefined);
 
-  const fieldEmpty = ({ name, username, password }: any) => {
-    let a = (name === '' || username === '' || password === '');
-    let b = (!name || !username || !password);
-
-    return a || b;
-  }
-
   const save = () => {
     let obj = { name, username, password};
     let p = localStorage.getItem('pass') as any;
 
     try {
-      p = getPasswords(input);
+      p = getPasswords(input ? input : '');
     } catch (e) {
       console.log(e);
       return setMsg('Error: unable to get your passwords. Please try again.');
@@ -58,9 +54,6 @@ const New = ({ location }: any) => {
         if (p[i].name === saveName) {
           break ;
         }
-      }
-      if (!obj) {
-        return
       }
       p[i] = obj;
       p = CryptoJs.AES.encrypt(JSON.stringify(p), input).toString();
