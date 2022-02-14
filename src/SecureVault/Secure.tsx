@@ -22,6 +22,7 @@ const Secure = ({ location }: any) => {
     if (!isPswSet) {
       let l = CryptoJs.AES.encrypt("validated", input.toString());
       localStorage.setItem('password', l);
+      localStorage.setItem('pass', CryptoJs.AES.encrypt(JSON.stringify([]), input.toString()));
       setIfPswSet(true);
       alert('Your password has been set !\nYou won\'t be able to recover it if you forget it !');
       return setInput('');
@@ -82,11 +83,7 @@ const Secure = ({ location }: any) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={isDisabled}
-          onKeyDown={(e) => {
-            if (e.keyCode === 13) {
-              return verify()
-            }
-          }}
+          onKeyDown={(e) => (e.code === 'Enter') && verify()}
         />
         <p className="error">{msg}</p>
         <input

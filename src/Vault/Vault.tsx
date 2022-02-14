@@ -15,9 +15,9 @@ const CryptoJs = require('crypto-js');
 const Vault = ({ location }: any) => {
   const history = useHistory();
   const input = location?.state?.input;
-  const [psw, setPsw] = useState(undefined) as any;
-  const [srch, setSrch] = useState('');
-  const [msg, setMsg] = useState('');
+  const [psw, setPsw] = useState<string | undefined>(undefined) as any;
+  const [srch, setSrch] = useState<string>('');
+  const [msg, setMsg] = useState<string>('');
 
   const filter = () => {
     let p = getPasswords() as [];
@@ -64,10 +64,11 @@ const Vault = ({ location }: any) => {
 
   const goTo = (item: any) => {
     return history.replace('/new', {
-      psw: input,
+      input: input,
       gname: item.name,
       gusername: item.username,
-      gpassword: item.password
+      gpassword: item.password,
+      isEditing: true
     });
   }
 
@@ -81,8 +82,19 @@ const Vault = ({ location }: any) => {
     let d = undefined;
 
     if (p !== undefined && p !== null) {
-      d = CryptoJs.AES.decrypt(p, t);
-      d = JSON.parse(d.toString(CryptoJs.enc.Utf8));
+      try {
+        d = CryptoJs.AES.decrypt(p, t);
+      } catch (e) {
+        console.log(e);
+        setMsg('Error parsing your passwords... Please try again.');
+        return setPsw(undefined);
+      }
+      try {
+        d = JSON.parse(d.toString(CryptoJs.enc.Utf8));
+      } catch (e) {
+        console.log(e);
+        return setPsw(undefined);
+      }
       return setPsw(d);
     }
     return setPsw(undefined);
@@ -111,7 +123,7 @@ const Vault = ({ location }: any) => {
         />
         <PlusBtn
           className='nav2btn'
-          onClick={() => history.replace('/new', { psw: input })}
+          onClick={() => history.replace('/new', { input: input })}
         />
       </div>
 
@@ -120,8 +132,8 @@ const Vault = ({ location }: any) => {
         <p className="msg">{ msg }</p>
         {psw === undefined ? (
           <>
-          <p className="emptyText">Nothing to see here</p>
-          <p style={{ color: '#fff' }}>Click '+' to add a new entry</p>
+            <p className="emptyText">Nothing to see here</p>
+            <p style={{ color: '#fff' }}>Click '+' to add a new entry</p>
           </>
         ) : psw.map((item: any, index: number) => {
           return (

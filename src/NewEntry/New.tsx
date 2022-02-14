@@ -1,31 +1,27 @@
-import React, { useState } from 'react'
-import { useHistory, useLocation } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router';
 import './New.css';
 
 import { ReactComponent as BackBtn } from '../assets/back.svg';
 import { ReactComponent as EyeBtn } from '../assets/eye.svg';
 import { ReactComponent as NoEyeBtn } from '../assets/no_eye.svg';
+import { getPasswords } from '../Globals/Middlewares';
 
 const CryptoJs = require("crypto-js");
 
-//! TODO - Patch crash
-//! When saving generated password from Gen
-//! save doesn't work, doesn't go back to
-//! vault and crashes ("cannot read property
-//! '0' of undefined")
 interface LocaState {
-  props: {
-    gname: string;
-    gusername: string;
-    gpassword: string;
-    psw: string;
-  };
+  gname: string;            // actual name for edit
+  gusername: string;        // actual username for edit
+  gpassword: string;        // actual password for edit | password from generator
+  input: string | undefined;// vault password (aka input)
+  isEditing?: boolean       // does it edit or does it make a new entry ?
 };
 
 const New = ({ location }: any) => {
   const history = useHistory()
   let props = location?.state;
-  const psw = props?.psw;
+  const doesEdit = props?.isEditing ? props.isEditing : false;
+  const input = props?.input ? props.input : undefined;
   const [name, setName] = useState<string>(props?.gname ? props.gname : '');
   const [username, setUsername] = useState<string>(props?.gusername ? props.gusername : '');
   const [password, setPassword] = useState<string>(props?.gpassword ? props.gpassword : '');
@@ -34,42 +30,43 @@ const New = ({ location }: any) => {
   const [msg, setMsg] = useState<string | undefined>(undefined);
 
   const fieldEmpty = ({ name, username, password }: any) => {
-    if (name === '' || username === '' || password === '')
-      return true;
-    else if (!name || !username || !password)
-      return true;
-    return false;
+    let a = (name === '' || username === '' || password === '');
+    let b = (!name || !username || !password);
+
+    return a || b;
   }
 
   const save = () => {
-    let obj = { name, username, password };
+    let obj = { name, username, password};
     let p = localStorage.getItem('pass') as any;
-    if (p) {
-      p = CryptoJs.AES.decrypt(p, psw);
-      p = JSON.parse(p.toString(CryptoJs.enc.Utf8));
-    }
-    if (fieldEmpty(obj))
-      return setMsg('Please fill all the fields')
 
-    if (!props.gusername && !props.gpassword && !props.gname) {
-      let o = obj;
-      if (p !== null) {
-        p.push(o);
-        p = CryptoJs.AES.encrypt(JSON.stringify(p), psw).toString();
-      } else
-        p = CryptoJs.AES.encrypt(JSON.stringify([o]), psw).toString();
-    } else {
+    try {
+      p = getPasswords(input);
+    } catch (e) {
+      console.log(e);
+      return setMsg('Error: unable to get your passwords. Please try again.');
+    }
+
+    if (!doesEdit) { // if new entry
+      if (p === null)
+        p = [];
+      p.push(obj);
+      p = CryptoJs.AES.encrypt(JSON.stringify(p), input).toString();
+    } else {  // if edit
       let i = 0;
       for (i; p && p[i]; ++i) {
         if (p[i].name === saveName) {
           break ;
         }
       }
+      if (!obj) {
+        return
+      }
       p[i] = obj;
-      p = CryptoJs.AES.encrypt(JSON.stringify(p), psw).toString();
+      p = CryptoJs.AES.encrypt(JSON.stringify(p), input).toString();
     }
     localStorage.setItem('pass', p);
-    return history.replace('/vault', {input: psw});
+    return history.replace('/vault', { input: input });
   }
 
   return (
@@ -79,11 +76,11 @@ const New = ({ location }: any) => {
         <BackBtn
           className='nav'
           onClick={() => {
-            if (props.gpassword !== undefined && props.gname === undefined) {
-              history.replace('/');
-            } else {
-              history.replace('/vault', { input: psw })
-            }
+            let a = (props.gpassword !== undefined && props.gname === undefined);
+            history.replace(
+              a ? '/' : '/vault',
+              a ? {} : { input }
+            );
           }}
         />
         <p className='title'>{ saveName === undefined ? 'Create new' : 'Modify' }</p>
@@ -94,6 +91,7 @@ const New = ({ location }: any) => {
         <p className='titlen'>{ saveName === undefined ? 'New password' : 'Edit password' }</p>
         <div className='inputn'>
           <input
+            required
             type='text'
             value={name}
             placeholder='Name'
@@ -103,6 +101,7 @@ const New = ({ location }: any) => {
         </div>
         <div className='inputn'>
           <input
+            required
             type='text'
             value={username}
             placeholder='Username or email adress'
@@ -112,6 +111,7 @@ const New = ({ location }: any) => {
         </div>
         <div style={{ display: 'flex', flexDirection: 'row' }} className='inputn'>
           <input
+            required
             type='text'
             value={password && (isPwsViewable ? password : '*'.repeat(password.length))}
             onKeyDown={(e) => {

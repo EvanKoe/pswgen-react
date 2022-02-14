@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import './Gen.css';
 import NavBar from '../Component/NavBar';
@@ -27,12 +27,7 @@ const Generator = () => {
 
   const gen = () => {
     let res = [];
-    let list = undefined;
-
-    if (isAlpha)
-      list = (isSpec ? nas : na)
-    else
-      list = (isSpec ? ns : n)
+    let list = isAlpha ? (isSpec ? nas : na) : (isSpec ? ns : n);
 
     for (let i = 0; i < len; ++i) {
       let n = ftoi(Math.random() * (list.length - 1))
@@ -60,7 +55,7 @@ const Generator = () => {
   }
 
   const save = () => {
-    history.replace('/new', { psw: password });
+    history.push({ pathname: '/securevault', state: { psw: password }});
   }
 
   return (
@@ -97,7 +92,7 @@ const Generator = () => {
           <input
             type="checkbox"
             checked={isAlpha}
-            onChange={(state) => setIfAlpha(a => !a)}
+            onChange={() => setIfAlpha(a => !a)}
             className="rowDiv checkboxes"
           />
         </div>
@@ -106,7 +101,7 @@ const Generator = () => {
           <input
             type="checkbox"
             checked={isSpec}
-            onChange={(state) => setIfSpec(a => !a)}
+            onChange={() => setIfSpec(a => !a)}
             className="rowDiv checkboxes"
           />
         </div>
@@ -123,16 +118,19 @@ const Generator = () => {
           type="button"
           style={{ flex: 1 }}
           value="Save"
-          onClick={() => history.replace('/securevault', { psw: password })}
+          onClick={save}
           className="button genBtn"
         />
-        {/* <input
-          type='button'
-          onClick={() => localStorage.clear()}
-          value='Clear'
-          className='button genBtn'
-        /> */}
       </div>
+
+      {/* debug only */}
+      <input
+          type='button'
+          onClick={() => { localStorage.clear(); console.log('cleared') }}
+          value='CLEAR DATA'
+          className='button genBtn'
+          style={{ backgroundColor: '#ddd', color: '#111' }}
+        />
     </div>
   );
 };
