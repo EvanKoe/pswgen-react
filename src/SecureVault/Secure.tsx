@@ -18,9 +18,9 @@ const Secure = ({ location }: any) => {
   const history = useHistory();
   const [nbOfAttemps, setNbOfAttemps] = useState(0);
   const [isDisabled, setIfDisabled] = useState(false);
+  const context = useContext(globales);
 
   const verify = () => {
-    const context = useContext(globales);
     let awaitTime = 0;
 
     if (!isPswSet) {
