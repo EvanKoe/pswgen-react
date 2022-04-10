@@ -35,8 +35,9 @@ const isPasswordSet = () => {
 * @returns your passwords
 */
 const getPasswords = (input: string) => {
-  if (input && !isPasswordCorrect(input) || !input)
+  if (input && !isPasswordCorrect(input) || !input) {
     throw 'Error : wrong password.';
+  }
   let p = localStorage.getItem('pass') as any;
   p = CryptoJs.AES.decrypt(p, input);
   p = JSON.parse(p.toString(CryptoJs.enc.Utf8));

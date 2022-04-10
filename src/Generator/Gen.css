@@ -8,11 +8,13 @@
   color: #ddd;
   font-size: 25px;
   display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .pswDiv {
   display: flex;
-  border-radius: 20px;
+  border-radius: 15px;
   background-color: #525252;
   margin: 32px 5%;
   padding: 16px 32px;
@@ -41,7 +43,7 @@
 
 .img {
   fill: #ddd;
-  margin-left: auto;
+  position: relative;
   animation: all 0.2s ease-in-out;
 }
 
@@ -64,7 +66,7 @@
 
 .check {
   color: #ddd;
-  margin-left: 10px;
+  margin-left: 5px;
   font-size: 20px;
 }
 
@@ -88,7 +90,7 @@
 
 .optionDiv {
   display: flex;
-  padding: 0 15px;
+  padding: 0 5%;
   align-items: center;
 }
 

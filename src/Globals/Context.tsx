@@ -13,7 +13,8 @@ const GlobalProvider = ({ children }: any) => {
   const [time, setTime] = useState<Date>(new Date(0));
   const [master, setMaster] = useState<string | undefined>(undefined);
 
-  useEffect(() => console.log('edited ! time = ', time, ' and master = ', master), [time, master])
+  useEffect(() => { console.log('Master modified : ' + master)}, [master]);
+  useEffect(() => { console.log('Time modified : ' + time)}, [time]);
 
   return (
     <globales.Provider value={{

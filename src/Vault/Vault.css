@@ -37,6 +37,7 @@
   font-weight: bold;
   font-size: 25px;
   margin: 0 0;
+  cursor: default;
   padding-top: 5px;
   animation: color 0.2s ease-in-out;
 }

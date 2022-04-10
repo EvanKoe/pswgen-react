@@ -8,8 +8,6 @@ import {
 } from '../Globals/Context';
 import { createMasterPassword, isPasswordCorrect, isPasswordSet } from '../Globals/Middlewares';
 
-const CryptoJs = require('crypto-js');
-
 const Secure = ({ location }: any) => {
   const psw = location?.state?.psw;
   const [input, setInput] = useState('');
@@ -55,8 +53,10 @@ const Secure = ({ location }: any) => {
         awaitTime = 60; break;
       case (5):
         setMsg('Erasing your data...');
-        localStorage.clear();
-        setIfPswSet(false);
+        setTimeout(() => {
+          localStorage.clear();
+          setIfPswSet(false);
+        }, 3000);
         break;
       default : setMsg('Wrong password. Please try again.');
     }

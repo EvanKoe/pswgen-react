@@ -50,8 +50,9 @@ const Generator = () => {
   }
 
   const toClip = () => {
-    if (password === 'Your password !')
+    if (password === 'Your password !') {
       return setError('Generate a password before copying it !')
+    }
     navigator.clipboard.writeText(password)
     setCopied('Password copied in your clipboard !')
   }
@@ -117,14 +118,14 @@ const Generator = () => {
       <div style={{ flexDirection: 'row', marginTop: 32, display: 'flex' }}>
         <input
           type="button"
-          style={{ flex: 1 }}
+          style={{ flex: 1, marginLeft: '5%' }}
           value="Generate"
           onClick={gen}
           className="button genBtn"
         />
         <input
           type="button"
-          style={{ flex: 1 }}
+          style={{ flex: 1, marginRight: '5%' }}
           value="Save"
           onClick={save}
           className="button genBtn"
@@ -133,12 +134,12 @@ const Generator = () => {
 
       {/* debug only */}
       <input
-          type='button'
-          onClick={() => { localStorage.clear(); console.log('cleared') }}
-          value='CLEAR DATA'
-          className='button genBtn'
-          style={{ backgroundColor: '#ddd', color: '#111' }}
-        />
+        type='button'
+        onClick={() => { localStorage.clear(); console.log('cleared') }}
+        value='CLEAR DATA'
+        className='button genBtn'
+        style={{ backgroundColor: '#ddd', color: '#111' }}
+      />
     </div>
   );
 };
